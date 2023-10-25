@@ -11,6 +11,7 @@ import {
 const image = require('../assets/background.png');
 const colors = ['#090C08', '#474056', '#8A95A5', '#B9C6AE'];
 
+// The 'navigation' prop is provided by the Navigator in App.js.
 const Start = ({ navigation }) => {
   const [name, setName] = useState('');
   const [background, setBackground] = useState(colors[0]);
@@ -30,6 +31,8 @@ const Start = ({ navigation }) => {
         <View style={styles.colorSelector}>
           <Text style={styles.colorTitle}>Choose Background Color:</Text>
           <View style={styles.colorButtonWrapper}>
+            {/* Map over the available colors and set the selected color to
+                the color that matches */}
             {colors.map((color) => (
               <TouchableOpacity
                 key={color}
@@ -38,6 +41,8 @@ const Start = ({ navigation }) => {
                   { backgroundColor: color },
                   background === color && styles.selected,
                 ]}
+                // When a button is pressed set the backgroundColor to the color
+                // of the selection.
                 onPress={() => setBackground(color)}
               />
             ))}
@@ -45,6 +50,8 @@ const Start = ({ navigation }) => {
         </View>
         <TouchableOpacity
           style={styles.button}
+          // Navigate to the Chat page passing along the name that was entered
+          // and the background color that was chosen.
           onPress={() => navigation.navigate('Chat', { name, background })}
         >
           <Text style={styles.buttonText}>Start Chatting</Text>
