@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   ImageBackground,
+  KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
@@ -56,6 +57,10 @@ const Start = ({ navigation }) => {
         >
           <Text style={styles.buttonText}>Start Chatting</Text>
         </TouchableOpacity>
+        {Platform.OS === 'android' && (
+          <KeyboardAvoidingView behavior="height" />
+        )}
+        {Platform.OS === 'ios' && <KeyboardAvoidingView behavior="padding" />}
       </View>
     </ImageBackground>
   );

@@ -6,6 +6,7 @@ The Native Chat app is a React Native application built using Expo. Its ultimate
 
 - React Native
 - Expo for cross-platform development
+- Gifted Chat for chat functionality
 - More to come...
 
 ## Features
