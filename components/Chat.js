@@ -1,40 +1,45 @@
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 
 // The 'navigation' and route props are provided by the Navigator in App.js.
-const Chat = ({ route, navigation }) => {
+const Chat = ({ db, route, navigation }) => {
   const [messages, setMessages] = useState([]);
 
   // These props are passed via the 'navigate' method.
-  const { name, background } = route.params;
+  const { userID, name, background } = route.params;
 
   useEffect(() => {
     navigation.setOptions({ title: name || 'No Name Specified' });
-    setMessages([
-      {
-        _id: 1,
-        text: 'You have entered the chat room',
-        createdAt: new Date(),
-        system: true,
-      },
-      {
-        _id: 2,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ]);
+
+    const q = query(collection(db, 'messages'), orderBy('createdAt', 'desc'));
+    const unsubMessages = onSnapshot(q, (documentsSnapshot) => {
+      let newMessages = [];
+      documentsSnapshot.forEach((doc) => {
+        newMessages.push({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: new Date(doc.data().createdAt.toMillis()),
+        });
+      });
+      setMessages(newMessages);
+    });
+
+    // Clean up code
+    return () => {
+      if (unsubMessages) unsubMessages();
+    };
   }, []);
 
   const onSend = (newMessages) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, newMessages)
-    );
+    addDoc(collection(db, 'messages'), newMessages[0]);
   };
 
   const renderBubble = (props) => {
@@ -54,8 +59,6 @@ const Chat = ({ route, navigation }) => {
   };
 
   return (
-    // More functionality to come in later exercises.
-    //
     // Set the backgroundColor with the background passed in.
     <View style={[styles.container, { backgroundColor: background }]}>
       <GiftedChat
@@ -63,7 +66,8 @@ const Chat = ({ route, navigation }) => {
         renderBubble={renderBubble}
         onSend={(messages) => onSend(messages)}
         user={{
-          _id: 1,
+          _id: userID,
+          name,
         }}
       />
       {Platform.OS === 'android' && <KeyboardAvoidingView behavior="height" />}
@@ -74,9 +78,7 @@ const Chat = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    // alignItems: 'center',
     flex: 1,
-    // justifyContent: 'center',
   },
 });
 
