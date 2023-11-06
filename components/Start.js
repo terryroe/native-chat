@@ -21,6 +21,7 @@ const Start = ({ navigation }) => {
 
   const auth = getAuth();
 
+  // Navigate to the Chat screen once the user has signed in successfully.
   const signInUser = () => {
     signInAnonymously(auth)
       .then((result) => {
@@ -100,7 +101,6 @@ const styles = StyleSheet.create({
   },
   colorButton: {
     backgroundColor: 'white',
-
     borderRadius: 25,
     height: 50,
     marginRight: 15,

@@ -78,6 +78,7 @@ const Chat = ({ isConnected, db, storage, route, navigation }) => {
     );
   };
 
+  // Only show the input bar when the device is connected to the Internet.
   const renderInputToolbar = (props) => {
     if (isConnected === true) return <InputToolbar {...props} />;
     else return null;

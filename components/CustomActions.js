@@ -42,6 +42,7 @@ const CustomActions = ({
     );
   };
 
+  // Generate a unique ID that will be used as the storage key.
   const generateReference = (uri) => {
     const timeStamp = new Date().getTime();
     const imageName = uri.split('/')[uri.split('/').length - 1];
@@ -53,12 +54,14 @@ const CustomActions = ({
     const newUploadRef = ref(storage, uniqueRefString);
     const response = await fetch(imageURI);
     const blob = await response.blob();
+    // Use the new ref to upload the new image blob.
     uploadBytes(newUploadRef, blob).then(async (snapshot) => {
       const imageURL = await getDownloadURL(snapshot.ref);
       onSend({ image: imageURL });
     });
   };
 
+  // Pick an image from the library on the device.
   const pickImage = async () => {
     let permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissions?.granted) {
@@ -68,6 +71,7 @@ const CustomActions = ({
     }
   };
 
+  // Take a new photo (image) with the camera on the device.
   const takePhoto = async () => {
     let permissions = await ImagePicker.requestCameraPermissionsAsync();
     if (permissions?.granted) {
@@ -77,6 +81,7 @@ const CustomActions = ({
     }
   };
 
+  // Get the location of the device.
   const getLocation = async () => {
     let permissions = await Location.requestForegroundPermissionsAsync();
     if (permissions?.granted) {

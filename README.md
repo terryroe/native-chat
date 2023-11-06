@@ -14,4 +14,12 @@ The Native Chat app is a React Native application built using Expo. Its ultimate
 - Customize the chat experience with a username and background color chosen by the user.
 - Chat with your friends.
 - Share photos and other media files.
-- More to come...
+- Share your location with other users.
+
+## Getting Started
+
+- Clone the [repository](https://github.com/terryroe/native-chat).
+- Change to the project directory and run: `npm install`.
+- Make sure Expo is installed globally: `npm install -g expo-cli`.
+- Make sure to use your own Firebase config in App.js.
+- Run `expo start`.
